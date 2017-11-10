@@ -1,8 +1,8 @@
 package com.ncuhome.find.service;
-
-/*
- *添加失物
- */
+/**
+ *
+ * 添加新的失物
+ **/
 
 import com.ncuhome.find.respository.*;
 import org.springframework.stereotype.Service;
@@ -11,10 +11,22 @@ import java.util.*;
 
 
 @Service
-public class AddLost {
+public class AddNewLost {
     private StudentRepository studentRepository = StudentStaticRepository.studentRepository;
     private LostRepository lostRepository = LostStaticRepository.lostRepository;
 //    private UserRepository userRepository = UserStaticRepository.userRepository;
+
+    /**
+     *
+     * @param cardNumberArray 待添加的卡数组
+     * @param cardType 待添加卡的类型
+     * @return
+     * 返回一个HashMap，里面包含两个对象，正确卡号键rightCard和错误卡号键wrongCard
+     * 正确卡号为HashMap对象，键为卡号，值为改该卡对应的Student对象
+     * 错误卡号为ArrayList对象
+     *
+     * */
+
 
     public Map<String, Object> classifyCard(String[] cardNumberArray, String cardType) {//筛选出数据库中存在的卡,即对卡分类
         Map<String, Object> allCard = new HashMap();
@@ -30,7 +42,7 @@ public class AddLost {
                 case "sfz":
                     student = studentRepository.findByIdCardNumber(cardNumber);
                     break;
-                case "jgk":
+                case "jhk":
                     student = studentRepository.findByJianhangCardNumber(cardNumber);
                     break;
             }
@@ -44,6 +56,11 @@ public class AddLost {
         allCard.put("wrongCard", wrongCard);
         return allCard;
     }
+
+
+    /**
+     * 将无误的卡号添加进数据库
+     * */
 
     public void addToDB_SE_SM(Map<Student, String> card) {
         Iterator<Map.Entry<Student, String>> iterator = card.entrySet().iterator();

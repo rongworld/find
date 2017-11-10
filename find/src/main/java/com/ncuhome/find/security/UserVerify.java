@@ -10,16 +10,12 @@ cookie验证
  */
 
 import javax.crypto.spec.SecretKeySpec;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 
-import com.ncuhome.find.domain.Token;
 import com.ncuhome.find.respository.User;
 import com.ncuhome.find.respository.UserRepository;
 import com.ncuhome.find.respository.UserStaticRepository;
-import com.ncuhome.find.service.MyCookies;
 import com.ncuhome.find.utils.MD5Util;
 import io.jsonwebtoken.*;
 
@@ -31,10 +27,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserVerify {
-    private static final Long ttlMillis = 3 * 1000 * 60L;//过期时间
-    private static final String apiKey = "ttttt";//秘钥
+
+    private static final Long ttlMillis = 1 * 60 * 60L;//过期时间1小时
+
+    private static final String apiKey = "FindTheCard";//秘钥
     private static final String issuer = " Online JWT Builder";
-    private static final String subject = "xuefu";
+    private static final String subject = "xueFu";
     private static UserRepository userRepository = UserStaticRepository.userRepository;
 
     //用户名和密码验证
@@ -43,21 +41,6 @@ public class UserVerify {
         String md5Password = MD5Util.encode(password);
         if (user != null && user.getPassword().equals(md5Password)) {
             return true;
-        } else {
-            return false;
-        }
-    }
-
-    //通过cookie和session验证用户
-    public static boolean verifyCookie(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Token token = (Token) session.getAttribute("token");//从session获取token对象
-        if (token != null) {
-            if (MyCookies.getCookiesValue(request, "token").equals(token.getValue())) {
-                return true;
-            } else {
-                return false;
-            }
         } else {
             return false;
         }

@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Service
-public class MyCookies {
+public class CookiesService {
     public static String getCookiesValue(HttpServletRequest request, String key) {
         Cookie[] cookies = request.getCookies();
         String value = null;

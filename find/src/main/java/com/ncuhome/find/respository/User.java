@@ -1,6 +1,8 @@
 package com.ncuhome.find.respository;
 
-
+/*
+* 存放用户信息
+* */
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;

@@ -1,7 +1,7 @@
 package com.ncuhome.find.respository;
 /*
 * 与数据库中的Lost对应
-*
+*存放失物信息
 * */
 
 import javax.persistence.Entity;
@@ -27,6 +27,17 @@ public class Lost {
     private Integer status;
 
     private String founder;
+
+    private Long claimDate;
+
+    public Long getClaimDate() {
+        return claimDate;
+    }
+
+    public void setClaimDate(Long claimDate) {
+        this.claimDate = claimDate;
+    }
+
 
     public String getFounder() {
         return founder;

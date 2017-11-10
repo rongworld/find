@@ -1,7 +1,10 @@
 package com.ncuhome.find.security;
 
-import com.ncuhome.find.service.MyCookies;
-import com.ncuhome.find.utils.ResponseUtil;
+
+/*
+* 过滤器
+* */
+import com.ncuhome.find.service.CookiesService;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -9,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-public class UserFilter implements Filter {
+public class HttpFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -20,13 +23,18 @@ public class UserFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-        if (verify(this.getTokenByHeader(httpServletRequest), this.getTokenByCookie(httpServletRequest))) {
+        httpServletResponse.setCharacterEncoding("UTF-8");
+        httpServletResponse.setContentType("application/json");
+        httpServletResponse.setHeader("Access-Control-Allow-Origin","*");
+        filterChain.doFilter(servletRequest, servletResponse);//身份验证成功
+
+       /* if (verify(this.getTokenByHeader(httpServletRequest), this.getTokenByCookie(httpServletRequest))) {
             filterChain.doFilter(servletRequest, servletResponse);//身份验证成功
         } else {
-            ResponseUtil.Format(httpServletResponse,401);
-            //httpServletResponse.setStatus(401);
-
+            httpServletResponse.setStatus(401);
+            httpServletResponse.getWriter().write("没有权限！");
         }
+*/
     }
 
     @Override
@@ -34,11 +42,11 @@ public class UserFilter implements Filter {
     }
 
     private String getTokenByHeader(HttpServletRequest httpServletRequest) {//从请求头获得token
-        return httpServletRequest.getHeader("author");
+        return httpServletRequest.getHeader("Authorization");
     }
 
     private String getTokenByCookie(HttpServletRequest httpServletRequest) {//从cookie获得token
-        return MyCookies.getCookiesValue(httpServletRequest, "token");
+        return CookiesService.getCookiesValue(httpServletRequest, "token");
     }
 
     private boolean verify(String headerToken, String cookieToken) {

@@ -1,4 +1,7 @@
 package com.ncuhome.find.respository;
+/*
+* 存放学生信息
+* */
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
