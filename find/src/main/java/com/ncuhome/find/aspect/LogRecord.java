@@ -1,5 +1,6 @@
 package com.ncuhome.find.aspect;
 
+import com.ncuhome.find.filter.SysContext;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -35,26 +36,25 @@ public class LogRecord {
 
     }
 */
-    @Pointcut("@annotation(org.springframework.web.bind.annotation.RestController)")
+
+
+    @Pointcut("@annotation(org.springframework.web.bind.annotation.GetMapping)")
     public void log2() {
+
     }
 
     @Around("log2()")
-    public void getLog2(ProceedingJoinPoint pjp) {
+    public Object getLog2(ProceedingJoinPoint pjp) throws Throwable{
+        doRequestLog(SysContext.getRequest());
         Object args[] = pjp.getArgs();
         for (Object arg : args) {
-            if (arg instanceof ServletRequest) {
-                doRequestLog(arg);
-            }else if(arg instanceof ServletResponse){
-                doResponseLog(arg);
-            }
-        }
 
+        }
+        return pjp.proceed();
     }
 
 
-    private void doRequestLog(Object object) {
-        HttpServletRequest request = (HttpServletRequest) object;
+    private void doRequestLog(HttpServletRequest request) {
         String requestUrl = request.getRequestURL().toString();//得到请求的URL地址
         String requestUri = request.getRequestURI()+"\n";//得到请求的资源
         String queryString = request.getQueryString()+"\n";//得到请求的URL地址中附带的参数
