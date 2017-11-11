@@ -1,5 +1,6 @@
 package com.ncuhome.find.controller;
 
+import com.ncuhome.find.annotation.LoginOnly;
 import com.ncuhome.find.domain.Result;
 import com.ncuhome.find.respository.Lost;
 import com.ncuhome.find.respository.LostRepository;
@@ -18,6 +19,7 @@ public class SearchLostController {
     private LostRepository lostRepository;
 
     @GetMapping(value = "/found")
+    @LoginOnly
     public Map getQueryResult(@RequestParam("cardNumber") String cardNumber) {
         List<Lost> lostList = lostRepository.findLostByCardNumber(cardNumber);
         if (lostList == null || lostList.isEmpty()) {

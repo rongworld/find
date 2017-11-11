@@ -1,5 +1,6 @@
 package com.ncuhome.find.controller;
 
+import com.ncuhome.find.annotation.LoginOnly;
 import com.ncuhome.find.service.ExcelService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import java.io.IOException;
 @Controller
 public class ExcelController {
     @GetMapping(value = "/download")
+    @LoginOnly
     public void down(@RequestParam(value = "dateStart",required = false,defaultValue = "0") String datestart,@RequestParam(value = "dateEnd",required = false,defaultValue = "0") String dateEnd, HttpServletResponse response)
             throws IOException,ServletException{
         HSSFWorkbook hssfWorkbook = new ExcelService().createBook(Long.parseLong(datestart),Long.parseLong(dateEnd));

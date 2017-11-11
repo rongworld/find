@@ -1,6 +1,5 @@
 package com.ncuhome.find.service;
 /**
- *
  * 添加新的失物
  **/
 
@@ -91,11 +90,24 @@ public class AddNewLost {
 
             lostRepository.save(lost);
             /*
-            SendEmail sendEmail = new SendEmail(student.getQq());
-            new Thread(sendEmail).start();
-            SendMessage sendMessage = new SendMessage(student.getPhoneNumber());
-            new Thread(sendMessage).start();
+            * 发送邮件
+            * */
+            if (student.getQq() != null) {
+                if (student.getQq().contains("@")) {
+                    MailService mailService = new MailService(student.getQq());
+                    new Thread(mailService).start();
+                } else {
+                    String email = student.getQq() + "@qq.com";
+                    MailService mailService = new MailService(email);
+                    new Thread(mailService).start();
+                }
+            }
 
+
+            /*
+            发送短信
+            MessageService sendMessage = new MessageService(student.getPhoneNumber());
+            new Thread(sendMessage).start();
             */
 
         }

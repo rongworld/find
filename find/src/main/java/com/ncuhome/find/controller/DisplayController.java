@@ -1,6 +1,6 @@
 package com.ncuhome.find.controller;
 
-import com.ncuhome.find.annotation.MustLogin;
+import com.ncuhome.find.annotation.LoginOnly;
 import com.ncuhome.find.domain.Result;
 import com.ncuhome.find.respository.Lost;
 import com.ncuhome.find.service.DisplayService;
@@ -14,10 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-
 @RequestMapping(value = "/api")
 public class DisplayController {
-    @MustLogin
+    //@LoginOnly
     @GetMapping(value = "/founds")
     public Map getEntryByPageable
             (@RequestParam(name = "page", required = false, defaultValue = "0") String pageNumber,
@@ -31,13 +30,13 @@ public class DisplayController {
         for(Lost lost:lostList){
             switch(lost.getCardType()){
                 case "xyk":
-                    lost.setCardType("0");
-                    break;
-                case "sfz":
                     lost.setCardType("1");
                     break;
-                case "jhk":
+                case "sfz":
                     lost.setCardType("2");
+                    break;
+                case "jhk":
+                    lost.setCardType("3");
                     break;
             }
 

@@ -8,13 +8,16 @@ spring:
     hibernate:
       ddl-auto: update
   mail:
-    host: smtp.exmail.qq.com
-    username: 用户名
-    password: 密码
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-            required: true
+      host: smtp.163.com
+      username: rongwang1998@163.com
+      password: wr000000
+      properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+              enable: true
+              required: true
+logging:
+  level: warn
+  file: /log/myLog.log

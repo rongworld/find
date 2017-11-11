@@ -5,10 +5,13 @@ import com.ncuhome.find.respository.Lost;
 import com.ncuhome.find.respository.LostRepository;
 import com.ncuhome.find.respository.LostStaticRepository;
 import org.apache.poi.hssf.usermodel.*;
+import org.springframework.stereotype.Service;
+
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 
+@Service
 public class ExcelService {
     private LostRepository lostRepository = LostStaticRepository.lostRepository;
     public HSSFWorkbook createBook(Long dateStart,Long dateEnd){

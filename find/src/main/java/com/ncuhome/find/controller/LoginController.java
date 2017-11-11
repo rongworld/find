@@ -27,7 +27,6 @@ public class LoginController {
             JSONObject jsonObject = new JSONObject(loginString);
             String username = jsonObject.getString("username");
             String password = jsonObject.getString("password");
-            response.setHeader("Access-Control-Allow-Origin","*");
             if (new UserVerify().verifyPassword(username, password)) {
                 String tokenString = UserVerify.createJWT();//验证通过新建一个token
                 response.setHeader("Authorization", tokenString);//给响应头设置token

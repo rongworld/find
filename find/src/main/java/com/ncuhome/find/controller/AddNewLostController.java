@@ -1,6 +1,6 @@
 package com.ncuhome.find.controller;
 
-import com.ncuhome.find.annotation.MustLogin;
+import com.ncuhome.find.annotation.LoginOnly;
 import com.ncuhome.find.domain.Result;
 import com.ncuhome.find.service.AddNewLost;
 import com.ncuhome.find.utils.CreateHashMapUtil;
@@ -13,13 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
-@MustLogin
 public class AddNewLostController {
+    @LoginOnly
     @PostMapping(value = "/newFound")
     public Map addLost(@RequestBody String cardJSONString) {
         JSONObject jsonObject = new JSONObject(cardJSONString);

@@ -28,8 +28,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserVerify {
 
-    private static final Long ttlMillis = 1 * 60 * 60L;//过期时间1小时
-
+    private static final Long ttlMillis = 1 * 60 * 60*1000L;//过期时间1小时
     private static final String apiKey = "FindTheCard";//秘钥
     private static final String issuer = " Online JWT Builder";
     private static final String subject = "xueFu";

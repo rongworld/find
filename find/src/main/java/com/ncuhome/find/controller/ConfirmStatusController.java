@@ -1,5 +1,6 @@
 package com.ncuhome.find.controller;
 
+import com.ncuhome.find.annotation.LoginOnly;
 import com.ncuhome.find.domain.Result;
 import com.ncuhome.find.respository.Lost;
 import com.ncuhome.find.respository.LostRepository;
@@ -14,6 +15,7 @@ import java.util.Map;
 public class ConfirmStatusController {
     private LostRepository lostRepository = LostStaticRepository.lostRepository;
     @PostMapping(value = "/status")
+    @LoginOnly
     public Map confirm(@RequestBody String confirmInfo) {
         JSONObject jsonObject = new JSONObject(confirmInfo);
         String cardNumber = jsonObject.getString("cardNumber");
