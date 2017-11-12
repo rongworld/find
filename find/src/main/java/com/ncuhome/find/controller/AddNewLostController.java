@@ -28,7 +28,5 @@ public class AddNewLostController {
         } else {
             return new Result(3, "添加失败", HashMapUtil.getMap("fail", wrongCard)).getMapResult();
         }
-
-
     }
 }

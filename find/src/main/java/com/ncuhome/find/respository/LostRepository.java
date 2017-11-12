@@ -9,4 +9,6 @@ public interface LostRepository extends JpaRepository<Lost, Integer> {
     Lost findById(Integer id);
     List<Lost> findByDateBetween(Long dateStart,Long dateEnd);
     List<Lost> findByName(String name);
+    Lost findByDate(Long Date);
+    List<Lost> findByDateBeforeAndStatus(Long date,Integer status);
 }

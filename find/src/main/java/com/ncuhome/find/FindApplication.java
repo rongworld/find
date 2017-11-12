@@ -8,12 +8,14 @@ import org.springframework.boot.web.servlet.ErrorPage;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 @SpringBootApplication
+@EnableScheduling
 public class FindApplication
   //      extends SpringBootServletInitializer implements WebApplicationInitializer
 
