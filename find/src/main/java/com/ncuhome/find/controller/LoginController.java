@@ -7,7 +7,7 @@ package com.ncuhome.find.controller;
 import com.ncuhome.find.domain.Result;
 import com.ncuhome.find.service.CookiesService;
 import com.ncuhome.find.security.UserVerify;
-import com.ncuhome.find.utils.CreateHashMapUtil;
+import com.ncuhome.find.utils.HashMapUtil;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,11 +31,11 @@ public class LoginController {
                 String tokenString = UserVerify.createJWT();//验证通过新建一个token
                 response.setHeader("Authorization", tokenString);//给响应头设置token
                 CookiesService.setCookiesValue(response, "token", tokenString);//给cookie设置token
-                return new Result(0, "登陆成功", CreateHashMapUtil.getMap("token",tokenString)).getMapResult();
+                return new Result(0, "登陆成功", HashMapUtil.getMap("token", tokenString)).getMapResult();
             } else {
                 return new Result(3, "登录失败").getMapResult();//验证不通过
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return new Result(3, "登录失败").getMapResult();
         }
     }

@@ -1,116 +1,110 @@
 package com.ncuhome.find.service;
-/**
- * 添加新的失物
- **/
 
+import com.ncuhome.find.domain.Card;
 import com.ncuhome.find.respository.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 @Service
 public class AddNewLost {
     private StudentRepository studentRepository = StudentStaticRepository.studentRepository;
     private LostRepository lostRepository = LostStaticRepository.lostRepository;
-//    private UserRepository userRepository = UserStaticRepository.userRepository;
 
-    /**
-     *
-     * @param cardNumberArray 待添加的卡数组
-     * @param cardType 待添加卡的类型
-     * @return
-     * 返回一个HashMap，里面包含两个对象，正确卡号键rightCard和错误卡号键wrongCard
-     * 正确卡号为HashMap对象，键为卡号，值为改该卡对应的Student对象
-     * 错误卡号为ArrayList对象
-     *
-     * */
-
-
-    public Map<String, Object> classifyCard(String[] cardNumberArray, String cardType) {//筛选出数据库中存在的卡,即对卡分类
-        Map<String, Object> allCard = new HashMap();
-        Map<Student, String> rightCard = new HashMap<>();
-        List<String> wrongCard = new ArrayList<>();
-        for (String cardNumber : cardNumberArray) {
-            Student student = null;//创建掉了东西的学生对象引用
-            switch (cardType) {
-                //引用指向具体对象
-                case "xyk":
-                    student = studentRepository.findByXuehao(cardNumber);
-                    break;
-                case "sfz":
-                    student = studentRepository.findByIdCardNumber(cardNumber);
-                    break;
-                case "jhk":
-                    student = studentRepository.findByJianhangCardNumber(cardNumber);
-                    break;
-            }
-            if (student != null) {
-                rightCard.put(student, cardNumber);
-            } else {
-                wrongCard.add(cardNumber);
-            }
-        }
-        allCard.put("rightCard", rightCard);
-        allCard.put("wrongCard", wrongCard);
-        return allCard;
-    }
-
-
-    /**
-     * 将无误的卡号添加进数据库
-     * */
-
-    public void addToDB_SE_SM(Map<Student, String> card) {
-        Iterator<Map.Entry<Student, String>> iterator = card.entrySet().iterator();
+    public void addToDB(ArrayList<Card> cardArrayList) {
+        Iterator<Card> iterator = cardArrayList.iterator();
+        Card card;
+        Student student;
+        Lost lost = new Lost();
         while (iterator.hasNext()) {
-            Map.Entry<Student, String> entry = iterator.next();
-            Student student = entry.getKey();
-            String cardNumber = entry.getValue();
-            Lost lost = new Lost();
-            lost.setName(student.getName());
-            lost.setDate(System.currentTimeMillis());
-            lost.setStatus(0);
-            lost.setCardNumber(cardNumber);
-            // lost.setSite("学服");
-            switch (cardNumber.length()) {
-                case 19:
-                    lost.setCardType("jhk");
-                    break;
-                case 18:
-                    lost.setCardType("sfz");
-                    break;
-                case 10:
+            card = iterator.next();
+            String cardNumber = card.getKh();
+            String type = card.getCard_type();
+            student = findStudent(card);
+            switch (type) {
+                case "1":
                     lost.setCardType("xyk");
                     break;
+                case "2":
+                    lost.setCardType("sfz");
+                    break;
+                case "3":
+                    lost.setCardType("jhk");
+                    break;
                 default:
-                    lost.setCardType("null");
+                    lost.setCardType(null);
                     break;
             }
-
+            lost.setStatus(0);
+            lost.setName(student.getName());
+            lost.setCardNumber(cardNumber);
+            lost.setDate(System.currentTimeMillis());
             lostRepository.save(lost);
-            /*
-            * 发送邮件
-            * */
-            if (student.getQq() != null) {
-                if (student.getQq().contains("@")) {
-                    MailService mailService = new MailService(student.getQq());
-                    new Thread(mailService).start();
-                } else {
-                    String email = student.getQq() + "@qq.com";
-                    MailService mailService = new MailService(email);
-                    new Thread(mailService).start();
-                }
+            sendEmail(student.getQq());
+            sendMessage(student.getPhoneNumber());
+        }
+    }
+
+    public Map classifyCard(String json) {
+        JSONObject jsonObject = new JSONObject(json);
+        JSONArray cardArray = (JSONArray) jsonObject.get("data");
+        ArrayList<Card> cards = new ArrayList<>();
+        JSONObject jsonObject1;
+        Map<String, ArrayList> cardMap = new HashMap();
+        ArrayList<String> wrongCard = new ArrayList<>();
+        ArrayList<Card> rightCard = new ArrayList<>();
+        Card card = new Card();
+        for (int i = 0; i < cardArray.length(); i++) {
+            jsonObject1 = cardArray.getJSONObject(i);
+            card.setCard_type(jsonObject1.getString("card_type"));
+            card.setKh(jsonObject1.getString("kh"));
+            cards.add(card);
+            Student student = findStudent(card);
+            if (student == null) {
+                wrongCard.add(card.getKh());
+            } else {
+                rightCard.add(card);
             }
+        }
+        cardMap.put("rightCard", rightCard);
+        cardMap.put("wrongCard", wrongCard);
+        return cardMap;
+    }
 
 
-            /*
-            发送短信
-            MessageService sendMessage = new MessageService(student.getPhoneNumber());
-            new Thread(sendMessage).start();
-            */
-
+    private Student findStudent(Card card) {
+        switch (card.getCard_type()) {
+            case "1":
+                return studentRepository.findByXuehao(card.getKh());
+            case "2":
+                return studentRepository.findByIdCardNumber(card.getKh());
+            case "3":
+                return studentRepository.findByJianhangCardNumber(card.getKh());
+            default:
+                return null;
         }
 
+
     }
+
+    private void sendEmail(String qq) {
+        String email;
+        if(qq.contains("@")){
+            email = qq;
+        }else{
+            email = qq+"@qq.com";
+        }
+        MailService mailService = new MailService(email);
+        new Thread(mailService).start();
+    }
+
+    private void sendMessage(String to) {
+
+    }
+
 }

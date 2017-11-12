@@ -15,16 +15,16 @@ import java.io.IOException;
 public class ExcelController {
     @GetMapping(value = "/download")
     @LoginOnly
-    public void down(@RequestParam(value = "dateStart",required = false,defaultValue = "0") String datestart,@RequestParam(value = "dateEnd",required = false,defaultValue = "0") String dateEnd, HttpServletResponse response)
-            throws IOException,ServletException{
-        HSSFWorkbook hssfWorkbook = new ExcelService().createBook(Long.parseLong(datestart),Long.parseLong(dateEnd));
-        if(hssfWorkbook.getSheet("失物信息表").getLastRowNum()>1){
+    public void down(@RequestParam(value = "dateStart", required = false, defaultValue = "0") String datestart, @RequestParam(value = "dateEnd", required = false, defaultValue = "0") String dateEnd, HttpServletResponse response)
+            throws IOException, ServletException {
+        HSSFWorkbook hssfWorkbook = new ExcelService().createBook(Long.parseLong(datestart), Long.parseLong(dateEnd));
+        if (hssfWorkbook.getSheet("失物信息表").getLastRowNum() > 1) {
             response.setHeader("content-Type", "application/vnd.ms-excel");
             // 下载文件的默认名称
             response.setHeader("Content-Disposition", "attachment;filename=Lost.xls");
 
             hssfWorkbook.write(response.getOutputStream());
-        }else{
+        } else {
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write("没有查到记录！");
         }

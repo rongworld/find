@@ -18,9 +18,8 @@ public class ConfirmStatusController {
     @LoginOnly
     public Map confirm(@RequestBody String confirmInfo) {
         JSONObject jsonObject = new JSONObject(confirmInfo);
-        String cardNumber = jsonObject.getString("cardNumber");
-        String date = jsonObject.getString("date");
-        Lost lost = lostRepository.findByCardNumberAndDate(cardNumber, Long.parseLong(date));
+        String id = jsonObject.getString("id");
+        Lost lost = lostRepository.findById(Integer.valueOf(id));
         lost.setStatus(1);
         lost.setClaimDate(System.currentTimeMillis());
         lostRepository.saveAndFlush(lost);

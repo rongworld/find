@@ -23,7 +23,6 @@ public class LoginVerify {
     @Pointcut("@annotation(com.ncuhome.find.annotation.LoginOnly)")
     public void intercept() {
     }
-
     @Autowired
     private HttpServletRequest httpServletRequest;
 
@@ -60,6 +59,5 @@ public class LoginVerify {
         }
 
     }
-
 
 }

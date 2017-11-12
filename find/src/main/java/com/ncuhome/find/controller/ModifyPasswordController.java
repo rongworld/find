@@ -23,15 +23,15 @@ public class ModifyPasswordController {
         try {
             JSONObject jsonObject = new JSONObject(modifyString);
             String username = jsonObject.getString("username");
-            String oldPassword = jsonObject.getString("oldPassword");
-            String newPassword = jsonObject.getString("newPassword");
-            if (PasswordService.modifyPassword(username, oldPassword, newPassword, userRepository)) {
-                return new Result(0,"修改成功").getMapResult();
+            String oldPassword = jsonObject.getString("password");
+            String newPassword = jsonObject.getString("new_password");
+            if (PasswordService.modifyPassword(username, oldPassword, newPassword)) {
+                return new Result(0, "修改成功").getMapResult();
             } else {
-                return new Result(3,"密码错误").getMapResult();
+                return new Result(3, "密码错误").getMapResult();
             }
         } catch (Exception e) {
-            return new Result(4,"未知错误").getMapResult();
+            return new Result(4, "未知错误").getMapResult();
         }
     }
 }

@@ -4,7 +4,7 @@ import com.ncuhome.find.annotation.LoginOnly;
 import com.ncuhome.find.domain.Result;
 import com.ncuhome.find.respository.Lost;
 import com.ncuhome.find.service.DisplayService;
-import com.ncuhome.find.utils.CreateHashMapUtil;
+import com.ncuhome.find.utils.HashMapUtil;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,7 +16,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/api")
 public class DisplayController {
-    //@LoginOnly
+    @LoginOnly
     @GetMapping(value = "/founds")
     public Map getEntryByPageable
             (@RequestParam(name = "page", required = false, defaultValue = "0") String pageNumber,
@@ -41,6 +41,6 @@ public class DisplayController {
             }
 
         }
-        return new Result(0, "成功", CreateHashMapUtil.getMap("lostList",lostList)).getMapResult();
+        return new Result(0, "成功", HashMapUtil.getMap("lostList",lostList)).getMapResult();
     }
 }

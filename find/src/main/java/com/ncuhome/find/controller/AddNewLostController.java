@@ -1,39 +1,34 @@
 package com.ncuhome.find.controller;
 
 import com.ncuhome.find.annotation.LoginOnly;
+import com.ncuhome.find.domain.Card;
 import com.ncuhome.find.domain.Result;
 import com.ncuhome.find.service.AddNewLost;
-import com.ncuhome.find.utils.CreateHashMapUtil;
-import com.ncuhome.find.utils.SpiltUtil;
-import org.json.JSONObject;
+import com.ncuhome.find.utils.HashMapUtil;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
 public class AddNewLostController {
     @LoginOnly
     @PostMapping(value = "/newFound")
-    public Map addLost(@RequestBody String cardJSONString) {
-        JSONObject jsonObject = new JSONObject(cardJSONString);
-        String cardString = jsonObject.getString("cardNumber");
-        String cardType = jsonObject.getString("cardType");
+    public Object addLost(@RequestBody String json) {
         AddNewLost addNewLost = new AddNewLost();
-        Map allCard = addNewLost.classifyCard(SpiltUtil.splitString(cardString, ","), cardType);//对卡进行分类
-        HashMap rightCard = (HashMap) allCard.get("rightCard");//正确的卡
-        ArrayList wrongCard = (ArrayList) allCard.get("wrongCard");//错误的卡
-        if (wrongCard == null || wrongCard.isEmpty()) {//没有错误的卡
-            addNewLost.addToDB_SE_SM(rightCard);
-            return new Result(0,"添加成功").getMapResult();
-        } else {//有错误的卡
-
-            return new Result(3,"添加失败", CreateHashMapUtil.getMap("wrongCard",wrongCard)).getMapResult();
+        Map<String, ArrayList> cardMap = addNewLost.classifyCard(json);
+        ArrayList<Card> rightCard = cardMap.get("rightCard");
+        ArrayList<String> wrongCard = cardMap.get("wrongCard");
+        if (wrongCard.isEmpty()) {//如果错误的卡为空，就添加至数据库中，否则返回错误的卡
+            addNewLost.addToDB(rightCard);
+            return new Result(0, "添加成功").getMapResult();
+        } else {
+            return new Result(3, "添加失败", HashMapUtil.getMap("fail", wrongCard)).getMapResult();
         }
+
+
     }
 }

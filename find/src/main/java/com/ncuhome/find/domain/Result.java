@@ -6,7 +6,7 @@ import java.util.Map;
 public class Result {
     private Integer code;
     private String message;
-    Map mapResult;
+    private Map mapResult;
 
     public Result(Integer code, String message) {
         mapResult = new HashMap();

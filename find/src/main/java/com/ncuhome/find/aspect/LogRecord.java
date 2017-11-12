@@ -71,7 +71,7 @@ public class LogRecord {
 
     private void doResponseLog(Object object){
         HttpServletResponse response = (HttpServletResponse)object;
-
+        logger.info(response.getContentType());
     }
 
 

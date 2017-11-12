@@ -2,7 +2,7 @@ package com.ncuhome.find.utils;
 
 import java.util.HashMap;
 
-public class CreateHashMapUtil {
+public class HashMapUtil {
     public static HashMap getMap(String key,Object object){
         if(key == null || object ==null){
             return null;
