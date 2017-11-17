@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
 
-@ControllerAdvice
+//@ControllerAdvice
 public class AllExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     @ResponseBody

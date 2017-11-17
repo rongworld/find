@@ -11,6 +11,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 @Aspect
 @Component
 public class LoginVerify {
+
+    @Value("${loginVerify}")
+    private boolean isVerify;
     private Logger logger = LoggerFactory.getLogger(LoginVerify.class);
 
     @Pointcut("@annotation(com.ncuhome.find.annotation.LoginOnly)")
@@ -28,6 +32,11 @@ public class LoginVerify {
 
     @Around("intercept()")
     public Object verify(ProceedingJoinPoint pjp) throws Throwable {
+        if(!isVerify){//判断是否开启验证
+            return pjp.proceed();
+        }
+
+
         if (verify(this.getTokenByHeader(httpServletRequest),//请求头token
                 this.getTokenByCookie(httpServletRequest),//cookie
                 this.getTokenByParameter(httpServletRequest))) {//参数token

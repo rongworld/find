@@ -5,6 +5,7 @@ import com.ncuhome.find.domain.Card;
 import com.ncuhome.find.domain.Result;
 import com.ncuhome.find.service.AddNewLost;
 import com.ncuhome.find.utils.HashMapUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,10 +16,11 @@ import java.util.*;
 @RestController
 @RequestMapping("/api")
 public class AddNewLostController {
+    @Autowired
+    private AddNewLost addNewLost;
     @LoginOnly
     @PostMapping(value = "/newFound")
     public Object addLost(@RequestBody String json) {
-        AddNewLost addNewLost = new AddNewLost();
         Map<String, ArrayList> cardMap = addNewLost.classifyCard(json);
         ArrayList<Card> rightCard = cardMap.get("rightCard");
         ArrayList<String> wrongCard = cardMap.get("wrongCard");

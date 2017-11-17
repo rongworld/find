@@ -9,6 +9,7 @@ import com.ncuhome.find.service.CookiesService;
 import com.ncuhome.find.security.UserVerify;
 import com.ncuhome.find.utils.HashMapUtil;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
@@ -20,6 +21,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 public class LoginController {
+    @Autowired UserVerify userVerify;
     @PostMapping(value = "/token")
     public Map Login(@RequestBody String loginString, HttpServletResponse response, HttpServletRequest request)
             throws ServletException, IOException {
@@ -27,7 +29,7 @@ public class LoginController {
             JSONObject jsonObject = new JSONObject(loginString);
             String username = jsonObject.getString("username");
             String password = jsonObject.getString("password");
-            if (new UserVerify().verifyPassword(username, password)) {
+            if (userVerify.verifyPassword(username, password)) {
                 String tokenString = UserVerify.createJWT();//验证通过新建一个token
                 response.setHeader("Authorization", tokenString);//给响应头设置token
                 CookiesService.setCookiesValue(response, "token", tokenString);//给cookie设置token

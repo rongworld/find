@@ -21,6 +21,7 @@ public class HttpFilter implements Filter {
         SysContext.setRequest((HttpServletRequest)request);
         SysContext.setResponse((HttpServletResponse)response);
         ((HttpServletResponse) response).setHeader("Access-Control-Allow-Origin","*");
+        response.setContentType("application/json;charset=UTF-8");
         chain.doFilter(request, response);
     }
 

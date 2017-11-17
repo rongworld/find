@@ -3,12 +3,15 @@ package com.ncuhome.find;
 import com.ncuhome.find.filter.HttpFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.web.servlet.ErrorPage;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.WebApplicationInitializer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,19 +20,19 @@ import java.util.List;
 @SpringBootApplication
 @EnableScheduling
 public class FindApplication
-  //      extends SpringBootServletInitializer implements WebApplicationInitializer
+        extends SpringBootServletInitializer implements WebApplicationInitializer
 
 {
     public static void main(String[] args) {
         SpringApplication.run(FindApplication.class, args);
     }
 
-/*
+
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(FindApplication.class);
     }
-*/
+
 
 
 

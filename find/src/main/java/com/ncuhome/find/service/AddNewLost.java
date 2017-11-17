@@ -4,6 +4,7 @@ import com.ncuhome.find.domain.Card;
 import com.ncuhome.find.respository.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,8 +14,10 @@ import java.util.Map;
 
 @Service
 public class AddNewLost {
-    private StudentRepository studentRepository = StudentStaticRepository.studentRepository;
-    private LostRepository lostRepository = LostStaticRepository.lostRepository;
+    @Autowired
+    private StudentRepository studentRepository;
+    @Autowired
+    private LostRepository lostRepository;
 
     public void addToDB(ArrayList<Card> cardArrayList) {
         Iterator<Card> iterator = cardArrayList.iterator();
@@ -45,8 +48,8 @@ public class AddNewLost {
             lost.setCardNumber(cardNumber);
             lost.setDate(System.currentTimeMillis());
             lostRepository.save(lost);
-            sendEmail(student.getQq());
-            sendMessage(student.getPhoneNumber());
+          //  sendEmail(student.getQq());
+      //      sendMessage(student.getPhoneNumber());
         }
     }
 
@@ -61,7 +64,7 @@ public class AddNewLost {
         Card card = new Card();
         for (int i = 0; i < cardArray.length(); i++) {
             jsonObject1 = cardArray.getJSONObject(i);
-            card.setCard_type(jsonObject1.getString("card_type"));
+            card.setCard_type(String.valueOf(jsonObject1.get("lost_type")));
             card.setKh(jsonObject1.getString("kh"));
             cards.add(card);
             Student student = findStudent(card);
@@ -103,8 +106,6 @@ public class AddNewLost {
         new Thread(mailService).start();
     }
 
-    private void sendMessage(String to) {
-
-    }
+   // private void sendMessage(String to) { }
 
 }

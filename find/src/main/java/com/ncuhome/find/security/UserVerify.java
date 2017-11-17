@@ -15,7 +15,6 @@ import java.security.Key;
 
 import com.ncuhome.find.respository.User;
 import com.ncuhome.find.respository.UserRepository;
-import com.ncuhome.find.respository.UserStaticRepository;
 import com.ncuhome.find.utils.MD5Util;
 import io.jsonwebtoken.*;
 
@@ -23,16 +22,17 @@ import java.util.Date;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Claims;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserVerify {
-
+    @Autowired
+    private UserRepository userRepository;
     private static final Long ttlMillis = 1 * 60 * 60*1000L;//过期时间1小时
     private static final String apiKey = "FindTheCard";//秘钥
     private static final String issuer = " Online JWT Builder";
     private static final String subject = "xueFu";
-    private static UserRepository userRepository = UserStaticRepository.userRepository;
 
     //用户名和密码验证
     public boolean verifyPassword(String username, String password) {

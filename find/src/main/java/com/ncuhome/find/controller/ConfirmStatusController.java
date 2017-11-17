@@ -4,8 +4,7 @@ import com.ncuhome.find.annotation.LoginOnly;
 import com.ncuhome.find.domain.Result;
 import com.ncuhome.find.respository.Lost;
 import com.ncuhome.find.respository.LostRepository;
-import com.ncuhome.find.respository.LostStaticRepository;
-import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -13,13 +12,15 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/api")
 public class ConfirmStatusController {
-    private LostRepository lostRepository = LostStaticRepository.lostRepository;
+    @Autowired
+    private LostRepository lostRepository;
     @PostMapping(value = "/status")
     @LoginOnly
-    public Map confirm(@RequestBody String confirmInfo) {
-        JSONObject jsonObject = new JSONObject(confirmInfo);
-        String id = jsonObject.getString("id");
-        Lost lost = lostRepository.findById(Integer.valueOf(id));
+    public Map confirm(@RequestBody String cardNumber) {
+        Lost lost = lostRepository.findByCardNumberAndStatus(cardNumber,0);
+        if(lost == null){
+            return null;
+        }
         lost.setStatus(1);
         lost.setClaimDate(System.currentTimeMillis());
         lostRepository.saveAndFlush(lost);

@@ -18,44 +18,29 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Aspect
-//@Component
+@Component
 @Deprecated
 public class LogRecord {
     private final Logger logger = LoggerFactory.getLogger(LogRecord.class);
 
 
-    /*
-    @Pointcut("execution(* com.ncuhome.find.controller..*(..))")
+
+    @Pointcut("@annotation(org.springframework.web.bind.annotation.GetMapping)||@annotation(org.springframework.web.bind.annotation.PostMapping)")
     public void log1() {
     }
 
 
-    @Around("log()1")
-    public void getLog(ProceedingJoinPoint pjp) {
-        MethodSignature methodSignature = (MethodSignature) pjp.getSignature();
-
-    }
-*/
-
-
-    @Pointcut("@annotation(org.springframework.web.bind.annotation.GetMapping)")
-    public void log2() {
-
-    }
-
-    @Around("log2()")
+    @Around("log1()")
     public Object getLog2(ProceedingJoinPoint pjp) throws Throwable{
         doRequestLog(SysContext.getRequest());
-        Object args[] = pjp.getArgs();
-        for (Object arg : args) {
 
-        }
-        return pjp.proceed();
+    return pjp.proceed();
     }
-
 
     private void doRequestLog(HttpServletRequest request) {
         String requestUrl = request.getRequestURL().toString();//得到请求的URL地址
+        logger.info("log()");
+        logger.info(requestUrl);
         String requestUri = request.getRequestURI()+"\n";//得到请求的资源
         String queryString = request.getQueryString()+"\n";//得到请求的URL地址中附带的参数
         String remoteAddr = request.getRemoteAddr()+"\n";//得到来访者的IP地址
@@ -66,7 +51,7 @@ public class LogRecord {
         String pathInfo = request.getPathInfo()+"\n";
         String localAddr = request.getLocalAddr()+"\n";//获取WEB服务器的IP地址
         String localName = request.getLocalName()+"\n";//获取WEB服务器的主机名
-        logger.info(requestUrl+requestUri+queryString+remoteAddr+remoteHost+remotePort+remoteUser+method+pathInfo+localAddr+localName);
+     //   logger.info(requestUrl+requestUri+queryString+remoteAddr+remoteHost+remotePort+remoteUser+method+pathInfo+localAddr+localName);
     }
 
     private void doResponseLog(Object object){

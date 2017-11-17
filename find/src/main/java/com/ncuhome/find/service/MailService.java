@@ -18,14 +18,14 @@ public class MailService implements Runnable{
 
     @Override
     public void run() {
-        sendSimpleMail();
+        sendSimpleMail(this.to);
     }
 
     public MailService(String to){
         this.to = to;
     }
 
-    public void sendSimpleMail() {
+    public void sendSimpleMail(String to) {
         String subject = "This is subject";
         String content = "This is content";
         SimpleMailMessage message = new SimpleMailMessage();
@@ -33,7 +33,7 @@ public class MailService implements Runnable{
         message.setTo(to);
         message.setSubject(subject);
         message.setText(content);
-
+        sender.send(message);
         try {
             sender.send(message);
             logger.info("简单邮件已经发送。" + to);

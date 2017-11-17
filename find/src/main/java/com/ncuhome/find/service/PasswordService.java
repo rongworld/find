@@ -6,14 +6,15 @@ package com.ncuhome.find.service;
 
 import com.ncuhome.find.respository.User;
 import com.ncuhome.find.respository.UserRepository;
-import com.ncuhome.find.respository.UserStaticRepository;
 import com.ncuhome.find.utils.MD5Util;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PasswordService {
-    private static UserRepository userRepository = UserStaticRepository.userRepository;
-    public static boolean modifyPassword(String username, String oldPassword, String newPassword) {
+    @Autowired
+    private UserRepository userRepository;
+    public  boolean modifyPassword(String username, String oldPassword, String newPassword) {
         User user = userRepository.findByUsername(username);//从数据库取得User对象
         if (user == null) {//没有查到该对象
             return false;

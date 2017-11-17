@@ -15,17 +15,14 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 public class ModifyPasswordController {
-    @Autowired
-    private UserRepository userRepository;
-
     @PostMapping(value = "/password")
-    public Map modifyPassword(@RequestBody String modifyString, HttpServletResponse response) throws IOException, ServletException {
+    public Map modifyPassword(@RequestBody String modifyString) throws IOException, ServletException {
         try {
             JSONObject jsonObject = new JSONObject(modifyString);
             String username = jsonObject.getString("username");
-            String oldPassword = jsonObject.getString("password");
-            String newPassword = jsonObject.getString("new_password");
-            if (PasswordService.modifyPassword(username, oldPassword, newPassword)) {
+            String oldPassword = jsonObject.getString("oldPassword");
+            String newPassword = jsonObject.getString("newPassword");
+            if (new PasswordService().modifyPassword(username, oldPassword, newPassword)) {
                 return new Result(0, "修改成功").getMapResult();
             } else {
                 return new Result(3, "密码错误").getMapResult();

@@ -46,7 +46,7 @@ public class ExcelService {
         cell = row.createCell(5);
         cell.setCellValue("认领时间");
         cell.setCellStyle(style);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日hh时mm分ss秒");
         List<Lost> lostList =  lostRepository.findByDateBetween(dateStart,dateEnd);
         if(lostList == null){
             return  null;
@@ -65,13 +65,13 @@ public class ExcelService {
                         break;
                     case 2:
                         switch ((lostList.get(i-1)).getCardType()){
-                            case "0":
+                            case "xyk":
                                 cell.setCellValue("校园卡");
                                 break;
-                            case "1":
+                            case "sfz":
                                 cell.setCellValue("身份证");
                                 break;
-                            case "2":
+                            case "jhk":
                                 cell.setCellValue("建行卡");
                                 break;
                         }
@@ -85,6 +85,11 @@ public class ExcelService {
                     case 5:
                         if(lostList.get(i-1).getClaimDate() == null){
                             cell.setCellValue("未认领");
+                            HSSFFont f = hssfWorkbook.createFont();
+                            f.setColor(HSSFFont.COLOR_RED);
+                            HSSFCellStyle h = hssfWorkbook.createCellStyle();
+                            h.setFont(f);
+                            cell.setCellStyle(h);
                         }else{
                             cell.setCellValue(simpleDateFormat.format(lostList.get(i-1).getClaimDate()));
                         }

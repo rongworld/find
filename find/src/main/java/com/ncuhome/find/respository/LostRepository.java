@@ -6,9 +6,8 @@ import java.util.List;
 
 public interface LostRepository extends JpaRepository<Lost, Integer> {
     List<Lost> findByCardNumber(String cardNumber);
-    Lost findById(Integer id);
+    Lost findByCardNumberAndStatus(String cardNumber,Integer status);
     List<Lost> findByDateBetween(Long dateStart,Long dateEnd);
     List<Lost> findByName(String name);
-    Lost findByDate(Long Date);
     List<Lost> findByDateBeforeAndStatus(Long date,Integer status);
 }
