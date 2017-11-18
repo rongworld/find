@@ -18,7 +18,10 @@ public class AddNewLost {
     private StudentRepository studentRepository;
     @Autowired
     private LostRepository lostRepository;
-
+    @Autowired
+    private MailService mailService;
+    @Autowired
+    private MessageService messageService;
     public void addToDB(ArrayList<Card> cardArrayList) {
         Iterator<Card> iterator = cardArrayList.iterator();
         Card card;
@@ -48,8 +51,10 @@ public class AddNewLost {
             lost.setCardNumber(cardNumber);
             lost.setDate(System.currentTimeMillis());
             lostRepository.save(lost);
-          //  sendEmail(student.getQq());
-      //      sendMessage(student.getPhoneNumber());
+            mailService.setTo(student.getQq());
+            new Thread(mailService).start();
+            messageService.setTo(student.getPhoneNumber());
+            new Thread(messageService).start();
         }
     }
 
@@ -94,18 +99,4 @@ public class AddNewLost {
 
 
     }
-
-    private void sendEmail(String qq) {
-        String email;
-        if(qq.contains("@")){
-            email = qq;
-        }else{
-            email = qq+"@qq.com";
-        }
-        MailService mailService = new MailService(email);
-        new Thread(mailService).start();
-    }
-
-   // private void sendMessage(String to) { }
-
 }

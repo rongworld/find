@@ -6,23 +6,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
 
-
-public class MailService implements Runnable{
+@Service
+public class MailService implements Runnable
+{
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private JavaMailSender sender;
-    private String to;
     @Value("${spring.mail.username}")
     private String from;
-
+    private String to = "";
     @Override
     public void run() {
-        sendSimpleMail(this.to);
+        sendSimpleMail(to);
     }
-
-    public MailService(String to){
-        this.to = to;
+    public void setTo(String to){
+        if (to.contains("@")) {
+            this.to = to;
+        }else {
+            this.to = to+"@qq.com";
+        }
     }
 
     public void sendSimpleMail(String to) {
@@ -33,7 +37,6 @@ public class MailService implements Runnable{
         message.setTo(to);
         message.setSubject(subject);
         message.setText(content);
-        sender.send(message);
         try {
             sender.send(message);
             logger.info("简单邮件已经发送。" + to);

@@ -3,14 +3,15 @@ package com.ncuhome.find.service;
 import org.springframework.stereotype.Service;
 
 
+@Service
 public class MessageService implements Runnable{
-    String to;
-    public MessageService(String to){
-        this.to = to;
-    }
+    private String to;
     @Override
     public void run() {
-
-
+    }
+    public void setTo(String to){
+        this.to = to;
+    }
+    private void SendMessage(String to){
     }
 }
