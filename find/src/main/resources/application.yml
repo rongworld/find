@@ -21,4 +21,4 @@ spring:
 logging:
   level: warn
   file: /log/myLog.log
-loginVerify: false
+loginVerify: true

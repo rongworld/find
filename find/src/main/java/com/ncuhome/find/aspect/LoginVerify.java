@@ -42,7 +42,7 @@ public class LoginVerify {
                 this.getTokenByParameter(httpServletRequest))) {//参数token
             return pjp.proceed();
         } else {
-            SysContext.getResponse().setStatus(401);
+          //  SysContext.getResponse().setStatus(401);
             return new Result(-1,"未登录").getMapResult();
         }
     }

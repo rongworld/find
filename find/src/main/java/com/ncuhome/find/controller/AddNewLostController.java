@@ -20,7 +20,7 @@ public class AddNewLostController {
     private AddNewLost addNewLost;
     @LoginOnly
     @PostMapping(value = "/newFound")
-    public Object addLost(@RequestBody String json) {
+    public Map addLost(@RequestBody String json) {
         Map<String, ArrayList> cardMap = addNewLost.classifyCard(json);
         ArrayList<Card> rightCard = cardMap.get("rightCard");
         ArrayList<String> wrongCard = cardMap.get("wrongCard");

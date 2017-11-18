@@ -39,7 +39,6 @@ public class LogRecord {
 
     private void doRequestLog(HttpServletRequest request) {
         String requestUrl = request.getRequestURL().toString();//得到请求的URL地址
-        logger.info("log()");
         logger.info(requestUrl);
         String requestUri = request.getRequestURI()+"\n";//得到请求的资源
         String queryString = request.getQueryString()+"\n";//得到请求的URL地址中附带的参数
@@ -52,6 +51,8 @@ public class LogRecord {
         String localAddr = request.getLocalAddr()+"\n";//获取WEB服务器的IP地址
         String localName = request.getLocalName()+"\n";//获取WEB服务器的主机名
      //   logger.info(requestUrl+requestUri+queryString+remoteAddr+remoteHost+remotePort+remoteUser+method+pathInfo+localAddr+localName);
+
+   logger.info(method);
     }
 
     private void doResponseLog(Object object){

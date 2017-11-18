@@ -8,6 +8,7 @@ public class MessageService implements Runnable{
     private String to;
     @Override
     public void run() {
+        SendMessage(to);
     }
     public void setTo(String to){
         this.to = to;
