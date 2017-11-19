@@ -1,15 +1,12 @@
 package com.ncuhome.find.aspect;
 
 import com.ncuhome.find.domain.Result;
-import com.ncuhome.find.filter.SysContext;
 import com.ncuhome.find.security.UserVerify;
 import com.ncuhome.find.service.CookiesService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -22,7 +19,6 @@ public class LoginVerify {
 
     @Value("${loginVerify}")
     private boolean isVerify;
-    private Logger logger = LoggerFactory.getLogger(LoginVerify.class);
 
     @Pointcut("@annotation(com.ncuhome.find.annotation.LoginOnly)")
     public void intercept() {

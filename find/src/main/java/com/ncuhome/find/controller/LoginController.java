@@ -21,7 +21,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 public class LoginController {
-    @Autowired UserVerify userVerify;
+    @Autowired
+    UserVerify userVerify;
+
     @PostMapping(value = "/token")
     public Map Login(@RequestBody String loginString, HttpServletResponse response, HttpServletRequest request)
             throws ServletException, IOException {
@@ -31,8 +33,8 @@ public class LoginController {
             String password = jsonObject.getString("password");
             if (userVerify.verifyPassword(username, password)) {
                 String tokenString = UserVerify.createJWT();//验证通过新建一个token
-                response.setHeader("Authorization", tokenString);//给响应头设置token
-                CookiesService.setCookiesValue(response, "token", tokenString);//给cookie设置token
+              //  response.setHeader("Authorization", tokenString);//给响应头设置token
+              //  CookiesService.setCookiesValue(response, "token", tokenString);//给cookie设置token
                 return new Result(0, "登陆成功", HashMapUtil.getMap("token", tokenString)).getMapResult();
             } else {
                 return new Result(3, "登录失败").getMapResult();//验证不通过

@@ -8,7 +8,6 @@ import com.ncuhome.find.utils.HashMapUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,15 +18,16 @@ public class SearchLostController {
 
     @Autowired
     private LostRepository lostRepository;
+
     @GetMapping(value = "/found")
     @LoginOnly
     public Map getQueryResult(@RequestParam("p") String string) {
         //List<Lost> lostList;
         Lost lost;
         if (isNumeric(string)) {
-            lost = lostRepository.findByCardNumberAndStatus(string,0);
+            lost = lostRepository.findByCardNumberAndStatus(string, 0);
         } else {
-            lost = lostRepository.findByNameAndStatus(string,0);
+            lost = lostRepository.findByNameAndStatus(string, 0);
         }
         if (lost == null) {
             return new Result(5, "NOT FOUND").getMapResult();

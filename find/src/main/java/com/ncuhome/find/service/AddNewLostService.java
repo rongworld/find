@@ -24,7 +24,7 @@ public class AddNewLostService {
     @Autowired
     private MessageService messageService;
     @Value("${sendEmail}")
-    private boolean isSendEmail;
+    private boolean isSendEmail;//邮件发送开关
     @Value("${sendMessage}")
     private boolean isSendMessage;
     public void addToDB(ArrayList<Card> cardArrayList) {
@@ -63,7 +63,6 @@ public class AddNewLostService {
                 new Thread(messageService).start();
             }
             if(isSendMessage){
-
             }
         }
     }
@@ -81,6 +80,9 @@ public class AddNewLostService {
             jsonObject1 = cardArray.getJSONObject(i);
             card.setCard_type(String.valueOf(jsonObject1.get("lost_type")));
             String kh = jsonObject1.getString("kh");
+            if (kh.equals("")) {//卡号为空，跳过
+                continue;
+            }
             card.setKh(kh);
             cards.add(card);
             Student student = findStudent(card);

@@ -7,7 +7,7 @@
 	<artifactId>find</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<!--	<packaging>jar</packaging> -->
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<name>find</name>
 	<description>Demo project for Spring Boot</description>
@@ -62,7 +62,7 @@
 		</dependency>
 
 
-
+<!--
 
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
@@ -70,7 +70,7 @@
                     <scope>provided</scope>
                 </dependency>
 
-
+-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>

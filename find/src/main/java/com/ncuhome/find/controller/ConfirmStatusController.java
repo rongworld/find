@@ -15,18 +15,19 @@ import java.util.Map;
 public class ConfirmStatusController {
     @Autowired
     private LostRepository lostRepository;
+
     @PostMapping(value = "/status")
     @LoginOnly
     public Map confirm(@RequestBody String cardNumberJSON) {
         JSONObject jsonObject = new JSONObject(cardNumberJSON);
         String cardNumber = jsonObject.getString("kh");
-        Lost lost = lostRepository.findByCardNumberAndStatus(cardNumber,0);
-        if(lost == null){
-            return new Result(3,"确认失败").getMapResult();
+        Lost lost = lostRepository.findByCardNumberAndStatus(cardNumber, 0);
+        if (lost == null) {
+            return new Result(3, "确认失败").getMapResult();
         }
         lost.setStatus(1);
         lost.setClaimDate(System.currentTimeMillis());
         lostRepository.saveAndFlush(lost);
-        return new Result(0,"确认成功").getMapResult();
+        return new Result(0, "确认成功").getMapResult();
     }
 }

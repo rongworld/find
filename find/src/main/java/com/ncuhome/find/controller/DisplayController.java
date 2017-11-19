@@ -19,19 +19,19 @@ import java.util.Map;
 public class DisplayController {
     @Autowired
     private DisplayService displayService;
+
     @LoginOnly
     @GetMapping(value = "/founds")
     public Map getEntryByPageable
             (@RequestParam(name = "page", required = false, defaultValue = "0") String pageNumber,
-             @RequestParam(name = "size", required = false, defaultValue = "15") String size)
-    {
-        List<Lost> lostList = displayService.getPage(Integer.valueOf(pageNumber),Integer.valueOf(size));
-        if (lostList == null||lostList.isEmpty()) {
+             @RequestParam(name = "size", required = false, defaultValue = "15") String size) {
+        List<Lost> lostList = displayService.getPage(Integer.valueOf(pageNumber), Integer.valueOf(size));
+        if (lostList == null || lostList.isEmpty()) {
             return new Result(5, "NOT FOUND").getMapResult();
         }
 
-        for(Lost lost:lostList){
-            switch(lost.getCardType()){
+        for (Lost lost : lostList) {
+            switch (lost.getCardType()) {
                 case "xyk":
                     lost.setCardType("1");
                     break;
@@ -43,6 +43,6 @@ public class DisplayController {
                     break;
             }
         }
-        return new Result(0, "成功", HashMapUtil.getMap("lostList",lostList)).getMapResult();
+        return new Result(0, "成功", HashMapUtil.getMap("lostList", lostList)).getMapResult();
     }
 }

@@ -38,7 +38,7 @@ public class ExcelController {
             }
         } catch (NumberFormatException e) {
             response.getWriter().write("输入时间有误！");
-        }catch (ParseException e){
+        } catch (ParseException e) {
             response.getWriter().write("输入时间有误！");
         }
     }

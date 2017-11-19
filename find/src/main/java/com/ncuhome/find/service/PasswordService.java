@@ -14,7 +14,8 @@ import org.springframework.stereotype.Service;
 public class PasswordService {
     @Autowired
     private UserRepository userRepository;
-    public  boolean modifyPassword(String username, String oldPassword, String newPassword) {
+
+    public boolean modifyPassword(String username, String oldPassword, String newPassword) {
         User user = userRepository.findByUsername(username);//从数据库取得User对象
         if (user == null) {//没有查到该对象
             return false;

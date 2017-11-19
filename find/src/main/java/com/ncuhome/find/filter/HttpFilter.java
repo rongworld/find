@@ -22,11 +22,6 @@ public class HttpFilter implements Filter {
         SysContext.setResponse((HttpServletResponse)response);
         ((HttpServletResponse) response).setHeader("Access-Control-Allow-Origin","*");
         response.setContentType("application/json;charset=UTF-8");
-        //((HttpServletResponse) response).setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE, PATCH");
-
-
-        //((HttpServletResponse) response).setHeader("Access-Control-Max-Age", "3600");
-        //((HttpServletResponse) response).setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         System.out.print(((HttpServletResponse) response).getStatus());
         chain.doFilter(request, response);
     }

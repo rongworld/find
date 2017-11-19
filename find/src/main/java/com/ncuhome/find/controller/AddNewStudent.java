@@ -6,14 +6,13 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class AddNewStudent {
     @Autowired
     private StudentRepository studentRepository;
-    @PostMapping(value = "/addnew")
+    @PostMapping(value = "/addNewStudent")
     public String add(@RequestBody String json){
         JSONObject jsonObject = new JSONObject(json);
         Student student = new Student();

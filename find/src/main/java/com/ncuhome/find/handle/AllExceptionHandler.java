@@ -1,5 +1,7 @@
 package com.ncuhome.find.handle;
-
+/*
+* 全局异常捕获
+* */
 import com.ncuhome.find.domain.Result;
 import com.ncuhome.find.filter.SysContext;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -8,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
 
-//@ControllerAdvice
+@ControllerAdvice
 public class AllExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
