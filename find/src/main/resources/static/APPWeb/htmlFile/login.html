@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport"  content="initial-scale=1"/>
+<link type="text/css" rel="stylesheet" href="../cssFile/login.css" />
+<script type="text/javascript" src="../jsFile/login.js"></script>
+<script type="text/javascript" src="../jsFile/vue.js"></script>
+<title>login</title>
+</head>
+
+<body onload="setHtmlSize()">
+<div id="div1" class="div1">
+	<div id="div2" class="div2">
+	<img class="img2" src="../imgs/drawable-xhdpi/picture4.png" />
+	<img class="img1" src="../imgs/drawable-xhdpi/head.png" />
+	</div>
+	<div id="loginDiv3" class="div3">
+		<div class="cinTable">
+			<form action="#" method="post" accept-charset="utf-8">
+				<dl>
+					<dt> <img src="../imgs/drawable-xhdpi/icon_name.png" class="name_icon" /> </dt>
+					<dd><input type="text" id="num" class="cinInput"  placeholder="学号" v-model="message.username" /> </dd>
+				</dl>
+				<hr>
+				<dl>
+					<dt style="height: 0.5rem"></dt>
+					<dd style="height: 0.5rem"></dd>
+				</dl>
+				<dl>
+					<dt> <img src="../imgs/drawable-xhdpi/passwordIcon.png" class="password_icon" /> </dt>
+					<dd><input type="password" id="password" class="cinInput" placeholder="云家园密码" v-model="message.password"/> </dd>
+				</dl>
+				<hr>
+			</form>
+			<div id="ErrorTip" class="ErrorTip" v-if="!isError">学号或密码错误</div>
+		</div>
+		<table class="LoginTable">
+			<tr>
+		    <td class="td3"><button class="loginInpute" v-on:click="enterFn">登录</button></td>
+		    </tr>
+		    <tr><td style="height:0.5rem;"></td></tr>
+		    <tr>
+		    <td><center><a href="changePassword.html" target="_self"><font class="fontstyle">修改密码</font></a></center></td>
+		    </tr>
+		</table>
+	</div>
+</div>
+</body>
+<script>
+    var loginPage = new Vue({
+        el:'#loginDiv3',
+        data:{
+            message:{username:'',password:''},
+            isError:true,
+            url:'http://localhost:8080/api/token'
+        },
+        methods:{
+            sendMessage:function(){
+                var jsonMessage = JSON.stringify(this.message);
+                var xhr = new XMLHttpRequest();
+             	var that = this;      
+                xhr.onreadystatechange = function(){
+                    if(xhr.readyState == 4){
+                        if(xhr.status >= 200 && xhr.status <300 || xhr.status == 304){
+                            var msg = JSON.parse(xhr.responseText);
+                            if(msg.code != 0){
+                            	console.log("111");
+                            	that.isError = false;
+                            	setTimeout(function(){
+                            		that.isError = 1;
+                            	},1500);
+                            }
+                            else{
+                            	that.addLocalMessage(msg.token);
+                            	window.location.href = "index.html";
+                            }
+                        }
+                        else{
+                            alert("网络错误:"+xhr.status);
+                        }
+                    }
+                };
+                xhr.open('post',this.url,true);
+                xhr.send(jsonMessage);
+            },
+            getLocalMessage:function(){
+                if(!window.localStorage){
+                    return false;
+                }
+                else{
+                    alert(window.localStorage.token);
+                }
+            },
+            addLocalMessage:function(message){
+                if(!window.localStorage){
+                    alert("no support to localStorage");
+                    return false;
+                }
+                else{
+                    var storage = window.localStorage;
+                    storage.token = message;    
+                }
+            },
+            enterFn:function(event){
+                if(this.message.username!=''&&this.message.password!=''){
+                    this.sendMessage();
+                }
+                else{
+                    this.isError=false;
+                    var that = this;
+                    setTimeout(function(){
+                    	that.isError = 1;
+                    },1500);
+                }
+            }
+        }
+    })
+</script>
+
+</html>

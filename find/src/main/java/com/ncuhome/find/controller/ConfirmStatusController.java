@@ -19,8 +19,8 @@ public class ConfirmStatusController {
     @LoginOnly
     public Map confirm(@RequestBody String cardNumberJSON) {
         JSONObject jsonObject = new JSONObject(cardNumberJSON);
-        String cardNumber = jsonObject.getString("date");
-        Lost lost = lostRepository.findByDate(Long.valueOf(cardNumber));
+        String cardNumber = jsonObject.getString("kh");
+        Lost lost = lostRepository.findByCardNumberAndStatus(cardNumber,0);
         if(lost == null){
             return new Result(3,"确认失败").getMapResult();
         }

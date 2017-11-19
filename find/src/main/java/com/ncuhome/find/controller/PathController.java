@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class PathController {
     @GetMapping(value = "/")
     public String getHtml(){
-        return "/login/htmlFile/index.html";
+        return "/APPWeb/htmlFile/index.html";
     }
 }

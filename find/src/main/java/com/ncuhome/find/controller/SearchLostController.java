@@ -19,20 +19,20 @@ public class SearchLostController {
 
     @Autowired
     private LostRepository lostRepository;
-
     @GetMapping(value = "/found")
     @LoginOnly
     public Map getQueryResult(@RequestParam("p") String string) {
-        List<Lost> lostList;
+        //List<Lost> lostList;
+        Lost lost;
         if (isNumeric(string)) {
-            lostList = lostRepository.findByCardNumber(string);
+            lost = lostRepository.findByCardNumberAndStatus(string,0);
         } else {
-            lostList = lostRepository.findByName(string);
+            lost = lostRepository.findByNameAndStatus(string,0);
         }
-        if (lostList.isEmpty()) {
+        if (lost == null) {
             return new Result(5, "NOT FOUND").getMapResult();
         } else {
-            return new Result(0, "查询成功", HashMapUtil.getMap("info", lostList)).getMapResult();
+            return new Result(0, "查询成功", HashMapUtil.getMap("info", lost)).getMapResult();
         }
     }
 

@@ -22,3 +22,7 @@ logging:
   level: warn
   file: /log/myLog.log
 loginVerify: true
+sendEmail: false
+sendMessage: false
+server:
+  port: 8080

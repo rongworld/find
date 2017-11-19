@@ -5,6 +5,7 @@ import com.ncuhome.find.respository.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 @Service
-public class AddNewLost {
+public class AddNewLostService {
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
@@ -22,16 +23,20 @@ public class AddNewLost {
     private MailService mailService;
     @Autowired
     private MessageService messageService;
+    @Value("${sendEmail}")
+    private boolean isSendEmail;
+    @Value("${sendMessage}")
+    private boolean isSendMessage;
     public void addToDB(ArrayList<Card> cardArrayList) {
         Iterator<Card> iterator = cardArrayList.iterator();
         Card card;
         Student student;
-        Lost lost = new Lost();
         while (iterator.hasNext()) {
             card = iterator.next();
             String cardNumber = card.getKh();
             String type = card.getCard_type();
             student = findStudent(card);
+            Lost lost = new Lost();
             switch (type) {
                 case "1":
                     lost.setCardType("xyk");
@@ -51,10 +56,15 @@ public class AddNewLost {
             lost.setCardNumber(cardNumber);
             lost.setDate(System.currentTimeMillis());
             lostRepository.save(lost);
-            mailService.setTo(student.getQq());
-            new Thread(mailService).start();
-            messageService.setTo(student.getPhoneNumber());
-            new Thread(messageService).start();
+            if(isSendEmail){
+                mailService.setTo(student.getQq());
+                new Thread(mailService).start();
+                messageService.setTo(student.getPhoneNumber());
+                new Thread(messageService).start();
+            }
+            if(isSendMessage){
+
+            }
         }
     }
 
@@ -66,14 +76,16 @@ public class AddNewLost {
         Map<String, ArrayList> cardMap = new HashMap();
         ArrayList<String> wrongCard = new ArrayList<>();
         ArrayList<Card> rightCard = new ArrayList<>();
-        Card card = new Card();
         for (int i = 0; i < cardArray.length(); i++) {
+            Card card = new Card();
             jsonObject1 = cardArray.getJSONObject(i);
             card.setCard_type(String.valueOf(jsonObject1.get("lost_type")));
-            card.setKh(jsonObject1.getString("kh"));
+            String kh = jsonObject1.getString("kh");
+            card.setKh(kh);
             cards.add(card);
             Student student = findStudent(card);
-            if (student == null) {
+            Lost lost = lostRepository.findByCardNumberAndStatus(kh,0);
+            if (student == null || lost != null) {//未查找到信息或者数据库存在相同的卡
                 wrongCard.add(card.getKh());
             } else {
                 rightCard.add(card);
