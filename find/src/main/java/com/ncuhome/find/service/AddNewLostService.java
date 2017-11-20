@@ -80,7 +80,7 @@ public class AddNewLostService {
             jsonObject1 = cardArray.getJSONObject(i);
             card.setCard_type(String.valueOf(jsonObject1.get("lost_type")));
             String kh = jsonObject1.getString("kh");
-            if (kh.equals("")) {//卡号为空，跳过
+            if (i!=0&&kh.equals("")) {//卡号为空，跳过
                 continue;
             }
             card.setKh(kh);

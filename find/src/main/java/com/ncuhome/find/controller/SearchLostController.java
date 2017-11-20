@@ -8,6 +8,8 @@ import com.ncuhome.find.utils.HashMapUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,20 +24,40 @@ public class SearchLostController {
     @GetMapping(value = "/found")
     @LoginOnly
     public Map getQueryResult(@RequestParam("p") String string) {
-        //List<Lost> lostList;
-        Lost lost;
+        List<Lost> lostList = null;
+
         if (isNumeric(string)) {
-            lost = lostRepository.findByCardNumberAndStatus(string, 0);
+            Lost lost = lostRepository.findByCardNumberAndStatus(string, 0);
+            if (lost != null) {
+                lost.setCardType(convert(lost.getCardType()));
+                lostList = new ArrayList<>();
+                lostList.add(lost);
+            }
         } else {
-            lost = lostRepository.findByNameAndStatus(string, 0);
+            lostList = lostRepository.findByNameAndStatus(string, 0);
+            for(Lost lost:lostList){
+                lost.setCardType(convert(lost.getCardType()));
+            }
         }
-        if (lost == null) {
+        if (lostList == null || lostList.isEmpty()) {
             return new Result(5, "NOT FOUND").getMapResult();
         } else {
-            return new Result(0, "查询成功", HashMapUtil.getMap("info", lost)).getMapResult();
+            return new Result(0, "查询成功", HashMapUtil.getMap("info", lostList)).getMapResult();
         }
     }
 
+    private String convert(String type) {
+        switch (type) {
+            case "xyk":
+                return "1";
+            case "sfz":
+                return "2";
+            case "jhk":
+                return "3";
+            default:
+                return null;
+        }
+    }
 
     private boolean isNumeric(String str) {
         Pattern pattern = Pattern.compile("[0-9]*");

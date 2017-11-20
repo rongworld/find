@@ -7,10 +7,8 @@ import java.util.List;
 
 public interface LostRepository extends JpaRepository<Lost, Integer>,JpaSpecificationExecutor<Lost> {
     List<Lost> findByCardNumber(String cardNumber);
-    List<Lost> findByDateBetween(Long dateStart,Long dateEnd);
-    List<Lost> findByName(String name);
     Lost findByCardNumberAndStatus(String cardNumber,Integer status);
+    List<Lost> findByDateBetween(Long dateStart,Long dateEnd);
+    List<Lost> findByNameAndStatus(String name,Integer status);
     List<Lost> findByDateBeforeAndStatus(Long date,Integer status);
-    Lost findByDate(Long date);
-    Lost findByNameAndStatus(String name,Integer status);
 }
